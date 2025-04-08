@@ -34,21 +34,21 @@ public class YouTrackUITests {
     @Test
     void login() {
         loginWithPassword();
-        WebElement element = waitForElementByXPath("/html/body/div[1]/div[1]/div[2]/div[2]/div[5]/span/div/button");
+        WebElement element = waitForElementByXPath("//img[@alt='User avatar']");
         assertTrue(element.isDisplayed());
     }
 
     void loginWithPassword() {
         waitForElementByXPath("//input[@id='username']").sendKeys(username);
         waitForElementByXPath(("//input[@id='password']")).sendKeys(password);
-        waitForElementByXPath("/html/body/div[2]/div[1]/div/div[2]/form/div[2]/div[2]/button/span/ng-transclude/span").click();
+        waitForElementByXPath("//button[@type='submit']").click();
     }
 
     @Test
     void logout() {
         loginWithPassword();
-        waitForElementByXPath("/html/body/div[1]/div[1]/div[2]/div[2]/div[5]/span/div/button/span").click();
-        waitForElementByXPath("/html/body/div[3]/div/div/div/div/div/div/div/div[5]/div/button").click();
+        waitForElementByXPath(String.format("//div[@title='%s']//button", username)).click();
+        waitForElementByXPath("//button[@data-test='ring-link ring-list-link ring-list-item' and text()='Выйти']").click();
         WebElement element = waitForElementByXPath("//input[@id='username']");
         assertTrue(element.isDisplayed());
     }
@@ -59,10 +59,12 @@ public class YouTrackUITests {
         new WebDriverWait(driver, Duration.ofSeconds(30)).until(
                 webDriver -> Objects.equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState"), "complete")
         );
-        waitForElementByXPath("/html/body/div[1]/div[2]/div[3]/div/div/div[1]/div[1]/div/div[2]/span[2]/span[1]/button").click();
-        waitForElementByXPath("/html/body/div[4]/div/div/div[2]/div[1]/div/div/div/div[4]/div/span/div/div[1]/a").click();
-        WebElement element = waitForElementByXPath("/html/body/div[1]/div[2]/div[3]/div/div/div[2]/main/div[1]/div[2]/h1");
-        assertTrue(element.isDisplayed());
+        waitForElementByXPath("//div[@id='breadcrumbs-portal-target']//button[span[span[text()='…']]]").click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("list-item-17-60xp"))).click();
+        WebElement input = waitForElementByXPath("//input");
+        input.click();
+        input.clear();
+        input.sendKeys(username);
     }
     @Test
     void openCreateWidgetMenu() {
@@ -70,9 +72,9 @@ public class YouTrackUITests {
         wait.until(
                 webDriver -> Objects.equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState"), "complete")
         );
-        waitForElementByXPath("/html/body/div[1]/div[2]/div[3]/div/div/div[1]/div[2]/div[2]/div/span/button").click();
-        waitForElementByXPath("/html/body/div[4]/div/div/div[2]/div[1]/div/div/div/div[2]/div/div/button/div/span[1]").click();
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("c_widgetDialog__a84")));
+        waitForElementByXPath("//button[@data-test='add-widget-button']").click();
+        waitForElementByXPath("//span[@title='Issue List']").click();
+        WebElement element = waitForElementByXPath("//span[@aria-label='Список задач']");
         assertTrue(element.isDisplayed());
     }
 
@@ -82,8 +84,8 @@ public class YouTrackUITests {
         wait.until(
                 webDriver -> Objects.equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState"), "complete")
         );
-        waitForElementByXPath("/html/body/div[1]/div[1]/div[2]/div[2]/div[4]/button/span/span[1]/span").click();
-        WebElement element = waitForElementByXPath("/html/body/div[2]/div/div/yt-notifications-feed/div/div[1]/h2/span[1]");
+        waitForElementByXPath("//button[@data-test='ring-link navigation-notifications-unread-button']").click();
+        WebElement element = waitForElementByXPath("//span[@data-test='notifications-feed-title']");
         assertTrue(element.isDisplayed());
     }
 
